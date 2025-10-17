@@ -1,0 +1,7 @@
+[tool.taskipy.tasks]
+run = "python manage.py runserver"
+freeze = "python -m pip freeze > requirements.txt"
+shell = "python manage.py shell"
+migrate = "python manage.py migrate"
+makemigrations = "python manage.py makemigrations"
+createsuperuser = "python manage.py createsuperuser"
