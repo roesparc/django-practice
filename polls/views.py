@@ -1,14 +1,14 @@
 from django.shortcuts import render
-from django.http import  Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import F
 from .models import Question, Choice
 from django.views import generic
 from django.utils import timezone
 
-# Create your views here.
 
 class IndexView(generic.ListView):
+    model = Question
     template_name = "polls/index.html"
 
     def get_queryset(self):
@@ -24,6 +24,12 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Question
     template_name = "polls/detail.html"
+
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet.
+        """
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 
 class ResultsView(generic.DetailView):
