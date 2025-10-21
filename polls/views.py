@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.db.models import F
 from .models import Question, Choice
 from django.views import generic
+from django.utils import timezone
 
 # Create your views here.
 
@@ -11,7 +12,13 @@ class IndexView(generic.ListView):
     template_name = "polls/index.html"
 
     def get_queryset(self):
-        return Question.objects.order_by("-pub_date")[:5]
+        """
+        Return the last five published questions (not including those set to be
+        published in the future).
+        """
+        now = timezone.now()
+        past_questions = Question.objects.filter(pub_date__lte=now)
+        return past_questions.order_by("-pub_date")[:5]
 
 
 class DetailView(generic.DetailView):
